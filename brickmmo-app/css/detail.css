@@ -1,0 +1,287 @@
+/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #fff;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: relative;
+}
+
+/* Header */
+header {
+    background-color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo img {
+    width: 80px;
+}
+
+h1 {
+    color: #ff5b00;
+    font-size: 28px;
+    margin: 10px 0;
+}
+
+.description {
+    font-size: 16px;
+    color: #848484;
+}
+
+/* Return Button */
+.return-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #ff5b00;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: 1px solid #ff5b00;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.return-btn:hover {
+    background-color: #ff5b00;
+    color: white;
+}
+
+/* GitHub Button */
+.github-btn {
+    display: inline-block;
+    background-color: #ff5b00;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+    width: 150px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.github-btn:hover {
+    background-color: #d94a00;
+}
+
+/* Repository Card */
+#repo-card {
+    max-width: 70%;
+    width: 100%;
+    background-color: #ffe8d6;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.repo-image {
+    flex-shrink: 0;
+    width: 300px;
+    height: auto;
+}
+
+.repo-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #ddd;
+}
+
+.repo-info {
+    flex: 1;
+    text-align: left;
+}
+
+.repo-info h2 {
+    margin: 0;
+    color: #000;
+}
+
+.repo-info p {
+    color: #848484;
+}
+
+/* Repository Details */
+#repo-details {
+    margin-top: 20px;
+    padding: 15px;
+}
+
+#repo-details h3 {
+    color: #000;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#repo-details ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#repo-details li {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+#repo-details strong {
+    font-weight: bold;
+    color: #333;
+}
+
+#repo-details span {
+    color: #666;
+}
+
+/* Footer */
+footer {
+    background-color: #fff;
+    padding: 20px;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.social-icons a {
+    text-decoration: none;
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+}
+
+.fa-brands, .fab {
+    font-size: 22px;
+}
+
+.fa-instagram {
+    color: rgb(218, 119, 135);
+}
+
+.fa-youtube {
+    color: red;
+}
+
+.fa-twitter {
+    color: black;
+}
+
+.fa-github {
+    color: black;
+}
+
+.fa-tiktok {
+    color: black;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    #repo-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .repo-image {
+        width: 80%;
+        max-width: 400px;
+    }
+
+    .repo-info {
+        text-align: center;
+    }
+
+    #repo-details {
+        text-align: center;
+    }
+
+    .return-btn {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo img {
+        margin-bottom: 10px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    #repo-card {
+        padding: 20px;
+    }
+
+    .repo-image {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .repo-info h2 {
+        font-size: 18px;
+    }
+
+    .repo-info p {
+        font-size: 14px;
+    }
+
+    .github-btn {
+        width: 100%;
+    }
+
+    .return-btn {
+        padding: 8px 12px;
+    }
+
+    .social-icons a {
+        font-size: 18px;
+    }
+
+    footer p {
+        font-size: 12px;
+    }
+}
