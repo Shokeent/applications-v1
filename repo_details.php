@@ -35,6 +35,12 @@ if (isset($_GET['repo'])) {
     $clonesData = fetchGitHubData($clonesUrl, $headers);
     $languagesData = fetchGitHubData($languagesUrl, $headers);
 
+    echo '<pre>';
+    print_r($repoData);
+
+    print_r($commitData);
+    echo '</pre>';
+
     $latestCommit = isset($commitsData[0]) ? $commitsData[0]['commit']['author'] : null;
     $contributors = array_map(fn($contributor) => "<a href='https://github.com/{$contributor['login']}' target='_blank'>{$contributor['login']}</a>", $contributorsData ?? []);
     $branches = array_map(fn($branch) => "<a href='{$repoData['html_url']}/tree/{$branch['name']}' target='_blank'>{$branch['name']}</a>", $branchesData ?? []);
