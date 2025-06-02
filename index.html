@@ -48,12 +48,40 @@
       <p>A place for all BrickMMO Applications</p>
     </section>
 
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="search-input" placeholder="Search repositories by name or language..." />
+      <button id="clear-search" class="clear-btn" style="display: none;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="search-filters">
+      <label>
+        <input type="checkbox" id="filter-name" checked> Repository Name
+      </label>
+      <label>
+        <input type="checkbox" id="filter-language" checked> Programming Language
+      </label>
+      <label>
+        <input type="checkbox" id="filter-description"> Description
+      </label>
+    </div>
+  </div>
+
   </header>
 
   <!-- main section -->
   <main>
 
     <section id="applications">
+
+      <!-- Search Results -->
+      <div id="search-info" style="display: none;">
+        <p id="search-results-text"></p>
+      </div>
+      
       <div class="applications-container" id="repo-container">
         <!-- Repositories will be injected here dynamically using Javascript -->
       </div>
