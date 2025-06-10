@@ -25,6 +25,8 @@ if (isset($_GET['repo'])) {
     $mergesUrl = "$repoUrl/pulls?state=closed";
     $clonesUrl = "$repoUrl/traffic/clones";
     $languagesUrl = "$repoUrl/languages";
+    $issuesUrl = "$repoUrl/issues?state=open";
+    $readmeUrl = "$repoUrl/readme";
 
     $repoData = fetchGitHubData($repoUrl, $headers);
     $commitsData = fetchGitHubData($commitsUrl, $headers);
@@ -34,6 +36,30 @@ if (isset($_GET['repo'])) {
     $mergesData = fetchGitHubData($mergesUrl, $headers);
     $clonesData = fetchGitHubData($clonesUrl, $headers);
     $languagesData = fetchGitHubData($languagesUrl, $headers);
+    $issuesData = fetchGitHubData($issuesUrl, $headers);
+    $readmeData = fetchGitHubData($readmeUrl, $headers);
+
+    // Process issues data
+$openIssuesCount = 0;
+$bugIssuesCount = 0;
+$goodFirstIssueCount = 0;
+
+if ($issuesData && is_array($issuesData)) {
+    $openIssuesCount = count($issuesData);
+    
+    foreach ($issuesData as $issue) {
+        $labels = $issue['labels'] ?? [];
+        foreach ($labels as $label) {
+            $labelName = strtolower($label['name']);
+            if (strpos($labelName, 'bug') !== false) {
+                $bugIssuesCount++;
+            }
+            if (strpos($labelName, 'good first issue') !== false || strpos($labelName, 'good-first-issue') !== false) {
+                $goodFirstIssueCount++;
+            }
+        }
+    }
+}
 
     $latestCommit = isset($commitsData[0]) ? $commitsData[0]['commit']['author'] : null;
     $contributors = array_map(fn($contributor) => "<a href='https://github.com/{$contributor['login']}' target='_blank'>{$contributor['login']}</a>", $contributorsData ?? []);
