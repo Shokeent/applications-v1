@@ -40,29 +40,42 @@ if (isset($_GET['repo'])) {
     $readmeData = fetchGitHubData($readmeUrl, $headers);
 
     // Process issues data
-$openIssuesCount = 0;
-$bugIssuesCount = 0;
-$goodFirstIssueCount = 0;
+    $openIssuesCount = 0;
+    $bugIssuesCount = 0;
+    $goodFirstIssueCount = 0;
 
-if ($issuesData && is_array($issuesData)) {
-    $openIssuesCount = count($issuesData);
-    
-    foreach ($issuesData as $issue) {
-        $labels = $issue['labels'] ?? [];
-        foreach ($labels as $label) {
-            $labelName = strtolower($label['name']);
-            if (strpos($labelName, 'bug') !== false) {
-                $bugIssuesCount++;
-            }
-            if (strpos($labelName, 'good first issue') !== false || strpos($labelName, 'good-first-issue') !== false) {
-                $goodFirstIssueCount++;
+    if ($issuesData && is_array($issuesData)) {
+        $openIssuesCount = count($issuesData);
+        
+        foreach ($issuesData as $issue) {
+            $labels = $issue['labels'] ?? [];
+            foreach ($labels as $label) {
+                $labelName = strtolower($label['name']);
+                if (strpos($labelName, 'bug') !== false) {
+                    $bugIssuesCount++;
+                }
+                if (strpos($labelName, 'good first issue') !== false || strpos($labelName, 'good-first-issue') !== false) {
+                    $goodFirstIssueCount++;
+                }
             }
         }
     }
-}
 
     $latestCommit = isset($commitsData[0]) ? $commitsData[0]['commit']['author'] : null;
-    $contributors = array_map(fn($contributor) => "<a href='https://github.com/{$contributor['login']}' target='_blank'>{$contributor['login']}</a>", $contributorsData ?? []);
+
+    // Enhanced contributors with profile pictures
+    $contributors = [];
+    if ($contributorsData && is_array($contributorsData)) {
+        foreach ($contributorsData as $contributor) {
+            $contributors[] = [
+                'login' => $contributor['login'],
+                'avatar_url' => $contributor['avatar_url'],
+                'html_url' => $contributor['html_url'],
+                'contributions' => $contributor['contributions']
+            ];
+        }
+    }
+
     $branches = array_map(fn($branch) => "<a href='{$repoData['html_url']}/tree/{$branch['name']}' target='_blank'>{$branch['name']}</a>", $branchesData ?? []);
     $forksCount = count($forksData ?? []);
     $mergesCount = count($mergesData ?? []);
