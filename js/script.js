@@ -50,6 +50,42 @@ async function fetchRepos(page = 1) {
   }
 }
 
+// Search and Filter Functionality
+function setupSearch() {
+  const searchInput = document.getElementById('search-input');
+  const clearBtn = document.getElementById('clear-search');
+  const filterName = document.getElementById('filter-name');
+  const filterLanguage = document.getElementById('filter-language');
+  const filterDescription = document.getElementById('filter-description');
+
+  // Search input event listener with debouncing
+  let searchTimeout;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      performSearch(e.target.value.trim());
+    }, 300);
+  });
+
+  // Clear search functionality
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    performSearch('');
+  });
+
+  // Filter checkbox listeners
+  [filterName, filterLanguage, filterDescription].forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      performSearch(searchInput.value.trim());
+    });
+  });
+
+  // Show/hide clear button
+  searchInput.addEventListener('input', (e) => {
+    clearBtn.style.display = e.target.value.trim() ? 'block' : 'none';
+  });
+}
+
 // Render Repositories with Pagination
 async function renderRepos() {
   repoContainer.innerHTML = ""; 
