@@ -81,6 +81,22 @@ if (isset($_GET['repo'])) {
     $mergesCount = count($mergesData ?? []);
     $clonesCount = $clonesData['count'] ?? 'N/A';
     $languages = implode(', ', array_keys($languagesData)) ?: 'N/A';
+
+    // Process commit activity by contributor
+    $commitsByContributor = [];
+    if ($commitsData && is_array($commitsData)) {
+        foreach ($commitsData as $commit) {
+            $author = $commit['commit']['author']['name'] ?? 'Unknown';
+            if (!isset($commitsByContributor[$author])) {
+                $commitsByContributor[$author] = [];
+            }
+            $commitsByContributor[$author][] = [
+                'date' => $commit['commit']['author']['date'],
+                'message' => $commit['commit']['message'],
+                'sha' => $commit['sha']
+            ];
+        }
+    }
 }
 ?>
 
