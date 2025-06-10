@@ -16,6 +16,10 @@ const githubUsername = "brickmmo";
 const perPage = 9; 
 let currentPage = 1;
 let allRepos = [];
+let filteredRepos = [];
+let currentSearchTerm = '';
+const searchInfo = document.getElementById("search-info");
+const searchResultsText = document.getElementById("search-results-text");
 
 // Fetch All Repositories with Pagination Support
 async function fetchRepos(page = 1) {
