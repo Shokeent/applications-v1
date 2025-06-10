@@ -136,11 +136,39 @@ if (isset($_GET['repo'])) {
                     <ul>
                         <li><strong>Forks:</strong> <span id="forks"> <?= $forksCount ?? 'N/A' ?> </span></li>
                         <li><strong>Branches:</strong> <span id="branches"> <?= implode(', ', $branches) ?: 'N/A' ?> </span></li>
-                        <li><strong>Contributors:</strong> <span id="contributors"> <?= implode(', ', $contributors) ?: 'N/A' ?> </span></li>
-                        <li><strong>Last Commit:</strong> <span id="commits"> <?= $latestCommit['name'] ?? 'N/A' ?> on <?= $latestCommit['date'] ?? 'N/A' ?> </span></li>
+                        <li><strong>Contributors:</strong> 
+                            <div id="contributors-list">
+                                <?php if (!empty($contributors)): ?>
+                                    <?php foreach ($contributors as $contributor): ?>
+                                        <div class="contributor-item">
+                                            <img src="<?= $contributor['avatar_url'] ?>" alt="<?= $contributor['login'] ?>" class="contributor-avatar">
+                                            <a href="<?= $contributor['html_url'] ?>" target="_blank" class="contributor-link">
+                                                <?= $contributor['login'] ?>
+                                            </a>
+                                            <span class="contribution-count">(<?= $contributor['contributions'] ?> contributions)</span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span>No contributors found</span>
+                                <?php endif; ?>
+                            </div>
+                        </li>
+                        <li><strong>Last Commit:</strong> 
+                            <span id="commits"> <?= $latestCommit['name'] ?? 'N/A' ?> on <?= $latestCommit['date'] ?? 'N/A' ?> </span>
+                            <button class="interactive-btn" onclick="toggleCommitActivity()">
+                                <i class="fas fa-chart-line"></i> View Commit Activity
+                            </button>
+                        </li>
                         <li><strong>Merges:</strong> <span id="merges"> <?= $mergesCount ?? 'N/A' ?> </span></li>
                         <li><strong>Clones:</strong> <span id="clones"> <?= $clonesCount ?> </span></li>
-                        <li><strong>Languages Used:</strong> <span id="languages"> <?= $languages ?> </span></li>
+                        <li><strong>Languages Used:</strong> 
+                            <span id="languages"> <?= implode(', ', array_keys($languages)) ?: 'N/A' ?> </span>
+                            <?php if (!empty($languages)): ?>
+                                <button class="interactive-btn" onclick="toggleLanguageChart()">
+                                    <i class="fas fa-chart-pie"></i> View Language Distribution
+                                </button>
+                            <?php endif; ?>
+                        </li>
                     </ul>
                 </div>
             </div>
