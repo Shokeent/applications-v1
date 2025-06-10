@@ -169,6 +169,22 @@ if (isset($_GET['repo'])) {
                                 </button>
                             <?php endif; ?>
                         </li>
+                        <li><strong>Issues:</strong>
+                            <div class="issues-container">
+                                <div class="issue-stat">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span>Open Issues: <?= $openIssuesCount ?></span>
+                                </div>
+                                <div class="issue-stat bug">
+                                    <i class="fas fa-bug"></i>
+                                    <span>Bugs: <?= $bugIssuesCount ?></span>
+                                </div>
+                                <div class="issue-stat good-first">
+                                    <i class="fas fa-seedling"></i>
+                                    <span>Good First Issues: <?= $goodFirstIssueCount ?></span>
+                                </div>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
