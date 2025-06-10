@@ -181,10 +181,10 @@ async function fetchLanguages(url) {
   }
 }
 
-// Pagination Controls with Next/Prev and Page Count
+// Pagination Controls with Next/Prev and Page Count (updated to use filtered repos)
 function renderPagination() {
   paginationContainer.innerHTML = ""; 
-  const totalPages = Math.ceil(allRepos.length / perPage);
+  const totalPages = Math.ceil(filteredRepos.length / perPage);
 
   if (totalPages > 1) {
     // Previous Button
@@ -199,7 +199,7 @@ function renderPagination() {
       paginationContainer.appendChild(prevButton);
     }
 
-    // Page Indicator "1/20"
+    // Page Indicator
     const pageIndicator = document.createElement("span");
     pageIndicator.classList.add("page-indicator");
     pageIndicator.innerText = `${currentPage} / ${totalPages}`;
