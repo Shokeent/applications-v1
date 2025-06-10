@@ -347,6 +347,10 @@ footer {
         gap: 10px;
     }
 
+    .search-container {
+        max-width: 500px;
+    }
+
     .applications-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -369,6 +373,13 @@ footer {
         font-size: 16px;
     }
 
+    .search-filters {
+        gap: 15px;
+    }
+    .search-container {
+        max-width: 400px;
+    }
+
     .social-icons a {
         font-size: 18px;
     }
@@ -381,6 +392,18 @@ footer {
 
     p {
         font-size: 14px;
+    }
+
+    .search-filters {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .search-box {
+        padding: 10px 15px;
+    }
+    .search-container {
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     .button-app-info, .button-app-github {
