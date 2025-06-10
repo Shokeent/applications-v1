@@ -128,22 +128,35 @@ function performSearch(searchTerm) {
   renderRepos();
 }
 
-// Render Repositories with Pagination
+// Render Repositories with Pagination (updated to use filtered repos)
 async function renderRepos() {
   repoContainer.innerHTML = ""; 
   const start = (currentPage - 1) * perPage;
   const end = start + perPage;
-  const reposToShow = allRepos.slice(start, end);
+  const reposToShow = filteredRepos.slice(start, end);
+
+  if (reposToShow.length === 0) {
+    repoContainer.innerHTML = currentSearchTerm ? 
+      "<p>No repositories found matching your search criteria.</p>" : 
+      "<p>No repositories available.</p>";
+    paginationContainer.innerHTML = "";
+    return;
+  }
 
   for (const repo of reposToShow) {
     const languages = await fetchLanguages(repo.languages_url);
     const repoCard = document.createElement("div");
     repoCard.classList.add("app-card");
 
+    // Highlight search terms in the display
+    const highlightedName = highlightSearchTerm(repo.name, currentSearchTerm);
+    const highlightedDescription = highlightSearchTerm(repo.description || "No description available", currentSearchTerm);
+    const highlightedLanguages = highlightSearchTerm(languages || "N/A", currentSearchTerm);
+
     repoCard.innerHTML = `
-      <h3 class="card-title">${repo.name}</h3>
-      <p class="app-description">${repo.description || "No description available"}</p>
-      <p><strong>Languages:</strong> ${languages || "N/A"}</p>
+      <h3 class="card-title">${highlightedName}</h3>
+      <p class="app-description">${highlightedDescription}</p>
+      <p><strong>Languages:</strong> ${highlightedLanguages}</p>
       <div class="card-buttons-container">
         <button class="button-app-info" onclick="window.open('${repo.html_url}', '_blank')">GitHub</button>
         <button class="button-app-github" onclick="window.location.href='repo_details.php?repo=${repo.name}'">View Details</button>
