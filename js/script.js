@@ -40,7 +40,9 @@ async function fetchRepos(page = 1) {
       // Recursively fetch next pages
       await fetchRepos(page + 1); 
     } else {
+      filteredRepos = [...allRepos]; // Initialize filtered repos
       renderRepos();
+      setupSearch();
     }
   } catch (error) {
     console.error("Error fetching GitHub repositories:", error);
