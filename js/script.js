@@ -86,6 +86,48 @@ function setupSearch() {
   });
 }
 
+// Perform search based on current filters and search term
+function performSearch(searchTerm) {
+  currentSearchTerm = searchTerm.toLowerCase();
+  currentPage = 1; // Reset to first page
+  
+  if (!searchTerm) {
+    filteredRepos = [...allRepos];
+    searchInfo.style.display = 'none';
+  } else {
+    const nameFilter = document.getElementById('filter-name').checked;
+    const languageFilter = document.getElementById('filter-language').checked;
+    const descriptionFilter = document.getElementById('filter-description').checked;
+    
+    filteredRepos = allRepos.filter(repo => {
+      let matches = false;
+      
+      // Search in repository name
+      if (nameFilter && repo.name.toLowerCase().includes(currentSearchTerm)) {
+        matches = true;
+      }
+      
+      // Search in primary language
+      if (languageFilter && repo.language && repo.language.toLowerCase().includes(currentSearchTerm)) {
+        matches = true;
+      }
+      
+      // Search in description
+      if (descriptionFilter && repo.description && repo.description.toLowerCase().includes(currentSearchTerm)) {
+        matches = true;
+      }
+      
+      return matches;
+    });
+    
+    // Show search results info
+    searchInfo.style.display = 'block';
+    searchResultsText.textContent = `Found ${filteredRepos.length} repositories matching "${searchTerm}"`;
+  }
+  
+  renderRepos();
+}
+
 // Render Repositories with Pagination
 async function renderRepos() {
   repoContainer.innerHTML = ""; 
