@@ -94,7 +94,8 @@ if (isset($_GET['repo'])) {
     $mergesCount = count($mergesData ?? []);
     $clonesCount = $clonesData['count'] ?? 'N/A';
     $languages = $languagesData ?: [];
-    $languagesDisplay = !empty($languages) ? implode(', ', array_keys($languages)) : 'N/A';
+    // $languagesDisplay = !empty($languages) ? implode(', ', array_keys($languages)) : 'N/A';
+    $languages = $languagesData ?: [];
 
     // Process commit activity by contributor
     $commitsByContributor = [];
@@ -177,7 +178,8 @@ if (isset($_GET['repo'])) {
                         <li><strong>Merges:</strong> <span id="merges"> <?= $mergesCount ?? 'N/A' ?> </span></li>
                         <li><strong>Clones:</strong> <span id="clones"> <?= $clonesCount ?> </span></li>
                         <li><strong>Languages Used:</strong> 
-                            <span id="languages"> <?= $languagesDisplay ?> </span>
+                            <!-- <span id="languages"> <?= $languagesDisplay ?> </span> -->
+                            <span id="languages"> <?= implode(', ', array_keys($languages)) ?: 'N/A' ?> </span>
                             <?php if (!empty($languages)): ?>
                                 <button class="interactive-btn" onclick="toggleLanguageChart()">
                                     <i class="fas fa-chart-pie"></i> View Language Distribution
