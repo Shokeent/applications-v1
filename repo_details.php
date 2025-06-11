@@ -189,6 +189,17 @@ if (isset($_GET['repo'])) {
                 </div>
             </div>
         </section>
+
+        <!-- README Section -->
+        <?php if (!empty($readmeContent)): ?>
+        <section id="readme-section">
+            <h3><i class="fas fa-file-alt"></i> README</h3>
+            <div class="readme-content">
+                <?= $readmeContent ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
     </main>
     <footer>
         <div class="social-icons">
