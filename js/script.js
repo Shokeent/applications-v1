@@ -169,6 +169,14 @@ async function renderRepos() {
   renderPagination();
 }
 
+// Highlight search terms
+function highlightSearchTerm(text, searchTerm) {
+  if (!searchTerm || !text) return text;
+  
+  const regex = new RegExp(`(${searchTerm})`, 'gi');
+  return text.replace(regex, '<mark>$1</mark>');
+}
+
 // Fetch Languages for Each Repo
 async function fetchLanguages(url) {
   try {
