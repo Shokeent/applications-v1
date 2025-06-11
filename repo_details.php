@@ -39,6 +39,19 @@ if (isset($_GET['repo'])) {
     $issuesData = fetchGitHubData($issuesUrl, $headers);
     $readmeData = fetchGitHubData($readmeUrl, $headers);
 
+    $readmeContent = '';
+    if ($readmeData && isset($readmeData['content'])) {
+        $readmeContent = base64_decode($readmeData['content']);
+        // Convert markdown to basic HTML (simple conversion)
+        $readmeContent = htmlspecialchars($readmeContent);
+        $readmeContent = preg_replace('/^# (.+)$/m', '<h1>$1</h1>', $readmeContent);
+        $readmeContent = preg_replace('/^## (.+)$/m', '<h2>$1</h2>', $readmeContent);
+        $readmeContent = preg_replace('/^### (.+)$/m', '<h3>$1</h3>', $readmeContent);
+        $readmeContent = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $readmeContent);
+        $readmeContent = preg_replace('/\*(.+?)\*/', '<em>$1</em>', $readmeContent);
+        $readmeContent = nl2br($readmeContent);
+    }
+
     // Process issues data
     $openIssuesCount = 0;
     $bugIssuesCount = 0;
@@ -80,7 +93,8 @@ if (isset($_GET['repo'])) {
     $forksCount = count($forksData ?? []);
     $mergesCount = count($mergesData ?? []);
     $clonesCount = $clonesData['count'] ?? 'N/A';
-    $languages = implode(', ', array_keys($languagesData)) ?: 'N/A';
+    $languages = $languagesData ?: [];
+    $languagesDisplay = !empty($languages) ? implode(', ', array_keys($languages)) : 'N/A';
 
     // Process commit activity by contributor
     $commitsByContributor = [];
@@ -163,7 +177,7 @@ if (isset($_GET['repo'])) {
                         <li><strong>Merges:</strong> <span id="merges"> <?= $mergesCount ?? 'N/A' ?> </span></li>
                         <li><strong>Clones:</strong> <span id="clones"> <?= $clonesCount ?> </span></li>
                         <li><strong>Languages Used:</strong> 
-                            <span id="languages"> <?= implode(', ', array_keys($languages)) ?: 'N/A' ?> </span>
+                            <span id="languages"> <?= $languagesDisplay ?> </span>
                             <?php if (!empty($languages)): ?>
                                 <button class="interactive-btn" onclick="toggleLanguageChart()">
                                     <i class="fas fa-chart-pie"></i> View Language Distribution
