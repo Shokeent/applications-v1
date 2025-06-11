@@ -105,9 +105,10 @@ if (isset($_GET['repo'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repository Details</title>
+    <title>Repository Details - <?= htmlspecialchars($repoData['name'] ?? 'N/A') ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="./css/detail.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
     <header>
@@ -200,6 +201,47 @@ if (isset($_GET['repo'])) {
         </section>
         <?php endif; ?>
 
+        <!-- Language Chart Modal -->
+        <div id="language-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-pie"></i> Language Distribution</h3>
+                    <span class="close" onclick="toggleLanguageChart()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <canvas id="languageChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commit Activity Modal -->
+        <div id="commit-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-line"></i> Commit Activity by Contributor</h3>
+                    <span class="close" onclick="toggleCommitActivity()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <canvas id="commitChart"></canvas>
+                    <div id="commit-details">
+                        <?php foreach ($commitsByContributor as $contributor => $commits): ?>
+                            <div class="contributor-commits">
+                                <h4><?= htmlspecialchars($contributor) ?> (<?= count($commits) ?> commits)</h4>
+                                <div class="recent-commits">
+                                    <?php foreach (array_slice($commits, 0, 5) as $commit): ?>
+                                        <div class="commit-item">
+                                            <span class="commit-date"><?= date('M j, Y', strtotime($commit['date'])) ?></span>
+                                            <span class="commit-message"><?= htmlspecialchars(substr($commit['message'], 0, 80)) ?><?= strlen($commit['message']) > 80 ? '...' : '' ?></span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
     <footer>
         <div class="social-icons">
@@ -212,5 +254,129 @@ if (isset($_GET['repo'])) {
         <p>&copy; BrickMMO, 2025. All rights reserved.</p>
         <p>LEGO, the LEGO logo and the Minifigure are trademarks of the LEGO Group.</p>
     </footer>
+
+    <script>
+    // Language data from PHP
+    const languageData = <?= json_encode($languages) ?>;
+    const commitData = <?= json_encode($commitsByContributor) ?>;
+
+    // Toggle Language Chart Modal
+    function toggleLanguageChart() {
+        const modal = document.getElementById('language-modal');
+        if (modal.style.display === 'block') {
+            modal.style.display = 'none';
+        } else {
+            modal.style.display = 'block';
+            createLanguageChart();
+        }
+    }
+
+    // Toggle Commit Activity Modal
+    function toggleCommitActivity() {
+        const modal = document.getElementById('commit-modal');
+        if (modal.style.display === 'block') {
+            modal.style.display = 'none';
+        } else {
+            modal.style.display = 'block';
+            createCommitChart();
+        }
+    }
+
+    // Create Language Distribution Pie Chart
+    function createLanguageChart() {
+        const ctx = document.getElementById('languageChart').getContext('2d');
+        
+        const labels = Object.keys(languageData);
+        const data = Object.values(languageData);
+        const total = data.reduce((a, b) => a + b, 0);
+        
+        // Generate colors for each language
+        const colors = [
+            '#ff5b00', '#ff8c42', '#ffa366', '#ffba8a', '#ffd1ae',
+            '#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6',
+            '#1abc9c', '#34495e', '#16a085', '#27ae60', '#2980b9'
+        ];
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + percentage + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Create Commit Activity Bar Chart
+    function createCommitChart() {
+        const ctx = document.getElementById('commitChart').getContext('2d');
+        
+        const contributors = Object.keys(commitData);
+        const commitCounts = contributors.map(contributor => commitData[contributor].length);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: contributors,
+                datasets: [{
+                    label: 'Number of Commits',
+                    data: commitCounts,
+                    backgroundColor: '#ff5b00',
+                    borderColor: '#ea5302',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const languageModal = document.getElementById('language-modal');
+        const commitModal = document.getElementById('commit-modal');
+        
+        if (event.target === languageModal) {
+            languageModal.style.display = 'none';
+        }
+        if (event.target === commitModal) {
+            commitModal.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>
